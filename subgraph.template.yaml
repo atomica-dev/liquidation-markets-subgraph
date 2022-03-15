@@ -1,0 +1,1815 @@
+specVersion: 0.0.2
+description: Keeper Pools
+repository: https://github.com/graphprotocol/atomica-graph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Registry
+    network: mainnet
+    source:
+      address: "0x0000000000000000000000000000000000000001"
+      abi: Registry
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Registry
+      abis:
+        - name: Registry
+          file: ./abis/Registry.json
+      eventHandlers:
+        - event: LogSetContract(bytes32,address)
+          handler: handleSetContractEvent
+      file: ./src/registry.ts
+  - kind: ethereum/contract
+    name: CreamKeeperAdapter
+    network: mainnet
+    source:
+      address: "0x0000000000000000000000000000000000000001"
+      abi: CreamKeeperAdapter
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: CreamKeeperAdapter
+          file: ./abis/CreamKeeperAdapter.json
+      eventHandlers:
+        - event: LogLiquidate(address,address,address,address,address,uint256,uint256,uint256,uint256)
+          handler: handleLogLiquidate
+      file: ./src/cream-keeper.ts
+  - kind: ethereum/contract
+    name: Pool
+    network: mainnet
+    source:
+      abi: Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/pool.ts
+      entities:
+        - PoolWallet
+        - PoolData
+        - PoolParticipant
+        - PoolEvent
+        - PoolRate
+        - PoolAdapter
+      abis:
+        - name: Pool
+          file: ./abis/Pool.json
+        - name: cERC20
+          file: ./abis/cERC20.json
+        - name: Module
+          file: ./abis/Module.json
+      eventHandlers:
+        - event: LogJoin(address,uint256,uint256)
+          handler: handleJoinEvent
+        - event: LogExit(address,uint256,uint256)
+          handler: handleExitEvent
+        - event: LogAllocate(address,uint256)
+          handler: handleAllocateEvent
+        - event: LogPayback(address,uint256)
+          handler: handlePaybackEvent
+        - event: LogPoolInitialized(address,uint256)
+          handler: handleLogPoolInitialized
+      blockHandlers:
+        - handler: handleBlock
+  - kind: ethereum/contract
+    name: Pool1
+    network: mainnet
+    source:
+      abi: Pool1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/pool.ts
+      entities:
+        - PoolWallet
+        - PoolData
+        - PoolParticipant
+        - PoolEvent
+        - PoolRate
+        - PoolAdapter
+      abis:
+        - name: Pool1
+          file: ./abis/Pool.json
+        - name: Pool
+          file: ./abis/Pool.json
+        - name: cERC20
+          file: ./abis/cERC20.json
+        - name: Module
+          file: ./abis/Module.json
+      eventHandlers:
+        - event: LogJoin(address,uint256,uint256)
+          handler: handleJoinEvent
+        - event: LogExit(address,uint256,uint256)
+          handler: handleExitEvent
+        - event: LogAllocate(address,uint256)
+          handler: handleAllocateEvent
+        - event: LogPayback(address,uint256)
+          handler: handlePaybackEvent
+        - event: LogPoolInitialized(address,uint256)
+          handler: handleLogPoolInitialized
+      blockHandlers:
+        - handler: handleBlock
+  - kind: ethereum/contract
+    name: Pool2
+    network: mainnet
+    source:
+      abi: Pool2
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/pool.ts
+      entities:
+        - PoolWallet
+        - PoolData
+        - PoolParticipant
+        - PoolEvent
+        - PoolRate
+        - PoolAdapter
+      abis:
+        - name: Pool2
+          file: ./abis/Pool.json
+        - name: Pool
+          file: ./abis/Pool.json
+        - name: cERC20
+          file: ./abis/cERC20.json
+        - name: Module
+          file: ./abis/Module.json
+      eventHandlers:
+        - event: LogJoin(address,uint256,uint256)
+          handler: handleJoinEvent
+        - event: LogExit(address,uint256,uint256)
+          handler: handleExitEvent
+        - event: LogAllocate(address,uint256)
+          handler: handleAllocateEvent
+        - event: LogPayback(address,uint256)
+          handler: handlePaybackEvent
+        - event: LogPoolInitialized(address,uint256)
+          handler: handleLogPoolInitialized
+      blockHandlers:
+        - handler: handleBlock
+  - kind: ethereum/contract
+    name: FlipEthA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_ETH_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleEthKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleEthTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleEthTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleEthDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleEthDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipEthA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_ETH_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_ETH_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleEthKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleEthTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleEthTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleEthDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleEthDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipEthA2
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_ETH_A2
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_ETH_A2
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleEthKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleEthTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleEthTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleEthDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleEthDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipBatA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_BAT_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_BAT_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleBatKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleBatTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleBatTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleBatDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleBatDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipBatA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_BAT_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_BAT_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleBatKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleBatTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleBatTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleBatDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleBatDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipWbtcA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_WBTC_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_WBTC_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleWbtcKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipWbtcA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_WBTC_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_WBTC_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleWbtcKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleWbtcDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipUsdcA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_USDC_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_USDC_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleUsdcKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipUsdcA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_USDC_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_USDC_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleUsdcKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipUsdcB
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_USDC_B
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_USDC_B
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleUsdcbKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipUsdcB3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_USDC_B3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_USDC_B3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleUsdcbKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdcbDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipTusdA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_TUSD_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_TUSD_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleTusdKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipTusdA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_TUSD_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_TUSD_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleTusdKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleTusdDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipZrxA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_ZRX_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_ZRX_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleZrxKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipZrxA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_ZRX_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_ZRX_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleZrxKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleZrxDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipKncA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_KNC_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_KNC_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleKncKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleKncTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleKncTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleKncDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleKncDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipKncA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_KNC_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_KNC_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleKncKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleKncTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleKncTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleKncDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleKncDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipManaA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_MANA_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_MANA_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleManaKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleManaTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleManaTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleManaDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleManaDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipManaA3
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_MANA_A3
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_MANA_A3
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleManaKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleManaTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleManaTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleManaDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleManaDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipUsdtA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_USDT_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_USDT_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleUsdtKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdtTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdtTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdtDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleUsdtDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipPaxusdA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_PAXUSD_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_PAXUSD_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handlePaxusdKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handlePaxusdTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handlePaxUsdTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handlePaxusdDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handlePaxusdDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipCompA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_COMP_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_COMP_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleCompKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleCompTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleCompTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleCompDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleCompDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipLrcA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_LRC_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_LRC_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleLrcKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleLrcTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleLrcTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleLrcDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleLrcDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: FlipLinkA
+    network: mainnet
+    source:
+      address: "0xd8a04F5412223F513DC55F839574430f5EC15531"
+      abi: MCD_FLIP_LINK_A
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Bid
+        - Auction
+        - PoolToAuctionMapping
+        - PoolAdapter
+        - AuctionSummary
+        - Registry
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: MCD_FLIP_LINK_A
+          file: ./abis/Flipper.json
+        - name: MCD_FLIP_ETH_A
+          file: ./abis/Flipper.json
+        - name: Registry
+          file: ./abis/Registry.json
+        - name: Exchange
+          file: ./abis/Exchange.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          topic0: '0xc84ce3a1172f0dec3173f04caaa6005151a4bfe40d4c9f3ea28dba5f719b2a7a'
+          handler: handleLinkKickEvent
+          # Tend
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x4b43ed1200000000000000000000000000000000000000000000000000000000'
+          handler: handleLinkTendDentLogNoteEvent
+          # Dent
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleLinkTendDentLogNoteEvent
+          # Deal
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleLinkDealYankLogNoteEvent
+          # Yank
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
+          handler: handleLinkDealYankLogNoteEvent
+          # Tick 0xfc7b6aee00000000000000000000000000000000000000000000000000000000
+      file: ./src/flipper.ts
+  - kind: ethereum/contract
+    name: Spot
+    network: mainnet
+    source:
+      address: "0x65C79fcB50Ca1594B025960e539eD7A9a6D434A3"
+      abi: MCD_SPOT
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: MCD_SPOT
+          file: ./abis/Spotter.json
+      eventHandlers:
+        - event: Poke(bytes32,bytes32,uint256)
+          handler: handleNewPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmEth
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_ETH
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_ETH
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewEthPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmBat
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_BAT
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_BAT
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewBatPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmWbtc
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_WBTC
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_WBTC
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewWbtcPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmUsdc
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_USDC
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_USDC
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewUsdcPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmTusd
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_TUSD
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_TUSD
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewTusdPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmZrx
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_ZRX
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_ZRX
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewZrxPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmKnc
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_KNC
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_KNC
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewKncPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmMana
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_MANA
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_MANA
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewManaPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmUsdt
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_USDT
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_USDT
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewUsdtPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmPaxusd
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_PAXUSD
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_PAXUSD
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewPaxusdPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmComp
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_COMP
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_COMP
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewCompPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmLrc
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_LRC
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_LRC
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewLrcPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: OsmLink
+    network: mainnet
+    source:
+      address: "0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"
+      abi: PIP_LINK
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CurrentPrice
+      abis:
+        - name: PIP_LINK
+          file: ./abis/OSM.json
+      eventHandlers:
+        - event: LogValue(bytes32)
+          handler: handleNewLinkPriceEvent
+      file: ./src/osm.ts
+  - kind: ethereum/contract
+    name: EMPCreator
+    network: mainnet
+    source:
+      address: "0x0000000000000000000000000000000000000001"
+      abi: ExpiringMultiPartyCreator
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UMALiquidation
+        - EMP
+      abis:
+        - name: ExpiringMultiPartyCreator
+          file: ./abis/ExpiringMultiPartyCreator.json
+        - name: ExpiringMultiParty
+          file: ./abis/ExpiringMultiParty.json
+      eventHandlers:
+        - event: CreatedExpiringMultiParty(indexed address,indexed address)
+          handler: handleCreatedExpiringMultiParty
+      file: ./src/emp.ts
+  - kind: ethereum/contract
+    name: UmaKeeperAdapter
+    network: mainnet
+    source:
+      address: "0x0000000000000000000000000000000000000001"
+      abi: UmaKeeperAdapter
+      startBlock: 8000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - UMALiquidation
+        - EMP
+      abis:
+        - name: UmaKeeperAdapter
+          file: ./abis/UmaKeeperAdapter.json
+      eventHandlers:
+        - event: LogTake(address,address,address,uint256,uint256,uint256,uint256)
+          handler: handleLogTake
+      file: ./src/emp.ts
+templates:
+  - kind: ethereum/contract
+    name: EMPTemplate
+    network: mainnet
+    source:
+      abi: ExpiringMultiParty
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/emp.ts
+      entities:
+        - EMPLiquidation
+        - EMP
+        - PoolAdapter
+        - UMALiquidationSummary
+        - PoolWallet
+        - Liquidation
+        - LiquidationSummary
+      abis:
+        - name: ExpiringMultiParty
+          file: ./abis/ExpiringMultiParty.json
+        - name: BalancerPool
+          file: ./abis/BalancerPool.json
+        - name: Pool
+          file: ./abis/Pool.json
+      eventHandlers:
+        - event: LiquidationCreated(indexed address,indexed address,indexed uint256,uint256,uint256,uint256,uint256)
+          handler: handleLiquidationCreated
+        - event: LiquidationDisputed(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleLiquidationDisputed
+        - event: DisputeSettled(indexed address,indexed address,indexed address,address,uint256,bool)
+          handler: handleDisputeSettled
+        - event: LiquidationWithdrawn(indexed address,uint256,indexed uint8,uint256)
+          handler: handleLiquidationWithdrawn

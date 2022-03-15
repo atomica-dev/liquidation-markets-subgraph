@@ -1,0 +1,23 @@
+{
+  "name": "atomica-liquidation-markets-subgraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "create": "graph create $GRAPH_LOCATION --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create atomica-dev/keeper-pool --node http://127.0.0.1:8020",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "auth": "graph auth https://api.thegraph.com/deploy/ $GRAPH_AUTH_TOKEN",
+    "update-subgraph-yaml": "ts-node --skipProject update-contracts.ts",
+    "deploy": "graph deploy $GRAPH_LOCATION --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token $GRAPH_AUTH_TOKEN",
+    "deploy-to-network": "graph deploy --node https://api.studio.thegraph.com/deploy/ $GRAPH_LOCATION --access-token $GRAPH_AUTH_TOKEN",
+    "deploy-ganache-local": "graph create atomica-dev/keeper-pool --node http://127.0.0.1:10020; npm run update-subgraph-yaml -- ganache; npm run codegen; npm run build; graph deploy atomica-dev/keeper-pool --ipfs http://localhost:5501 --node http://127.0.0.1:10020",
+    "deploy-local": "graph deploy atomica-dev/keeper-pool --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy-ganache": "graph deploy atomica-dev/keeper-pool --ipfs http://localhost:5501 --node http://127.0.0.1:10020"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "0.28.0",
+    "@graphprotocol/graph-ts": "0.26.0",
+    "ts-node": "^10.7.0",
+    "yaml": "^1.7.2"
+  }
+}

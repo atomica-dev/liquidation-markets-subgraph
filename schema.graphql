@@ -1,0 +1,220 @@
+type Factory @entity {
+  """id is 1"""
+  id: ID!
+  pools: [PoolWallet!]!
+}
+
+type PoolWallet @entity {
+  id: ID!
+  wallet: String
+  manager: String
+  poolToken: String!
+  atDate: BigInt!
+}
+
+type PoolData @entity {
+  """id is wallet or pool address"""
+  id: ID!
+  currentPool: Bytes!
+  originToken: Bytes
+  poolToken: Bytes
+  atDate: BigInt!
+  originDate: BigInt!
+  participantsCount: Int!
+  originTokenBalance: BigInt!
+  initialPoolBalance: BigInt
+  joinSum: BigInt!
+  exitSum: BigInt!
+  poolTokenBalance: BigInt!
+  factory: Factory!
+}
+
+type EMP @entity {
+  id: ID!
+  priceFeed: Bytes
+  collateralCurrency: Bytes
+  tokenCurrency: Bytes
+  liquidationsCount: Int!
+}
+
+type LiquidationSummary @entity {
+  """pool token id"""
+  id: ID!
+  wonCount: Int!
+  discountSum: BigInt!
+  discountTotal: Int!
+  total: Int!
+  finished: Int!
+}
+
+type Liquidation @entity {
+  id: ID!
+  venue: String!
+  num: Int!
+  isActive: Boolean!
+  status: Int!
+  poolToken: String!
+  collateralType: String
+  collateralAmount: BigInt
+  liquidatedTokens: BigInt
+  withdrawalAmount: BigInt
+  price: BigInt
+  timestamp: BigInt
+  latestTransaction: Bytes!
+  blockNumber: BigInt
+  gasLimit: BigInt
+  gasPrice: BigInt
+}
+
+type UMALiquidationSummary @entity {
+  """pool token id"""
+  id: ID!
+  wonCount: Int!
+  discountSum: BigInt!
+  total: Int!
+  finished: Int!
+  # liquidations: [UMALiquidation]  @derivedFrom(field: "pool")
+}
+
+type UMALiquidation @entity {
+  id: ID!
+  num: Int!
+  empId: String!
+  sponsor: Bytes!
+  pool: Bytes
+  poolToken: String!
+  liquidationId: BigInt!
+  liquidationTimestamp: BigInt!
+  latestTransaction: Bytes!
+  lockedCollateral: BigInt!
+  liquidatedCollateral: BigInt!
+  liquidatedTokens: BigInt!
+  withdrawalAmount: BigInt
+  disputer: Bytes
+  disputeSucceeded: Boolean
+  settlementPrice: BigInt
+  price: BigInt
+  withdrawnAt: BigInt
+  withdrawTransaction: Bytes
+  withdrawPrice: BigInt
+  blockNumber: BigInt
+  gasLimit: BigInt
+  gasPrice: BigInt
+  isOur: Boolean
+  status: Int!
+}
+
+type PoolToAuctionMapping @entity {
+  """pool id + auction id"""
+  id: ID!
+  auctionSummary: AuctionSummary!
+  isOur: Boolean
+  isOurBid: Boolean
+  phase: Int!
+  auction: Auction!
+  at: BigInt!
+}
+
+type PoolParticipant @entity {
+  id: ID! # participant id == user address
+  pool: Bytes!
+  originTokenBalance: BigInt!
+  poolTokenBalance: BigInt!
+}
+
+type PoolAdapter @entity {
+  id: ID! # adapter id == contract address
+  pool: Bytes!
+}
+
+type PoolEvent @entity {
+  id: ID!
+  pool: Bytes!
+  type: Int! # Join | Exit | Allocate | Payback | Transfer: 0 .. 4
+  user: Bytes!
+  originTokenAmount: BigInt!
+  poolTokenAmount: BigInt!
+  atDate: BigInt!
+
+  #balance: BigInt!
+  #totalSupply: BigInt!
+}
+
+type PoolRate @entity {
+  id: ID!
+  pool: Bytes!
+  balance: BigInt!
+  allocated: BigInt
+  totalSupply: BigInt!
+  fromDate: BigInt!
+  toDate: BigInt
+}
+
+type Bid @entity {
+  id: ID!
+  ilk: String!
+  auctionId: Int!
+  bid: BigInt!
+  lot: BigInt!
+  guy: Bytes!
+  at: BigInt!
+  hash: Bytes!
+  price: BigInt
+  osmPrice: Bytes
+  blockNumber: BigInt
+  gasLimit: BigInt
+  gasPrice: BigInt
+  isOurBid: Boolean
+}
+
+
+type Auction @entity {
+  id: ID!
+  ilk: String!
+  auctionId: BigInt!
+  bid: BigInt!
+  lot: BigInt!
+  guy: Bytes
+  tic: BigInt!
+  end: BigInt!
+  tab: BigInt!
+  phase: Int!
+  at: BigInt!
+  latestTransaction: Bytes!
+  price: BigInt
+  osmPrice: Bytes
+  dealAt: BigInt
+  dealTransaction: Bytes
+  dealPrice: BigInt
+  dealOsmPrice: Bytes
+  blockNumber: BigInt
+  gasLimit: BigInt
+  gasPrice: BigInt
+  bidCount: Int
+  isOur: Boolean
+  isOurBid: Boolean
+}
+
+type AuctionSummary @entity {
+  """pool id or TOTAL"""
+  id: ID!
+  participatedCount: Int!
+  wonCount: Int!
+  discountSum: BigInt!
+  totalAuctions: Int!
+  finishedAuctions: Int!
+  finishedOurAuctions: Int!
+  auctions: [PoolToAuctionMapping!]  @derivedFrom(field: "auctionSummary")
+}
+
+type CurrentPrice @entity {
+  id: ID!
+  value: Bytes
+  spotValue: Bytes
+  updatedAt: BigInt!
+}
+
+type Registry @entity {
+  id: ID!
+  value: Bytes
+}
