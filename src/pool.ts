@@ -254,7 +254,7 @@ export function getKeeperAdapter(id: string): PoolAdapter | null {
   let keeperAdapter = PoolAdapter.load(id);
 
   if (keeperAdapter !== null) {
-    let poolContract = PoolContract.bind(keeperAdapter.pool as Address);
+    let poolContract = PoolContract.bind(changetype<Address>(keeperAdapter.pool));
     let result = poolContract.try_adapters(Address.fromString(id));
 
     if (result !== null && !result.reverted && result.value.gt(BigInt.fromI32(0))) {

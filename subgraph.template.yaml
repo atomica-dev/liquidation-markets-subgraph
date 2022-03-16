@@ -13,7 +13,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Registry
@@ -33,7 +33,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Liquidation
@@ -52,7 +52,7 @@ dataSources:
       abi: Pool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/pool.ts
       entities:
@@ -89,7 +89,7 @@ dataSources:
       abi: Pool1
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/pool.ts
       entities:
@@ -128,7 +128,7 @@ dataSources:
       abi: Pool2
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/pool.ts
       entities:
@@ -169,7 +169,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -221,7 +221,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -275,7 +275,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -329,7 +329,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -383,7 +383,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -437,7 +437,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -491,7 +491,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -545,7 +545,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -599,7 +599,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -653,7 +653,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -707,7 +707,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -761,7 +761,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -815,7 +815,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -869,7 +869,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -923,7 +923,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -977,7 +977,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1031,7 +1031,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1085,7 +1085,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1139,7 +1139,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1193,7 +1193,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1247,7 +1247,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1301,7 +1301,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1355,7 +1355,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1409,7 +1409,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Bid
@@ -1463,7 +1463,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1483,7 +1483,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1503,7 +1503,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1523,7 +1523,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1543,7 +1543,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1563,7 +1563,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1583,7 +1583,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1603,7 +1603,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1623,7 +1623,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1643,7 +1643,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1663,7 +1663,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1683,7 +1683,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1703,7 +1703,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1723,7 +1723,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - CurrentPrice
@@ -1743,7 +1743,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - UMALiquidation
@@ -1766,7 +1766,7 @@ dataSources:
       startBlock: 8000000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - UMALiquidation
@@ -1786,7 +1786,7 @@ templates:
       abi: ExpiringMultiParty
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/emp.ts
       entities:

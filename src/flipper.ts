@@ -431,11 +431,11 @@ function getExchangePriceFor(lot: BigInt, ilk: string): BigInt {
     return BigInt.fromI32(-1);
   }
 
-  let exchange = Exchange.bind(exchangeAddress.value as Address);
+  let exchange = Exchange.bind(changetype<Address>(exchangeAddress.value));
 
   let result: ethereum.CallResult<BigInt>;
 
-  result = exchange.try_getOutput(ilkAddress.value as Address, lot);
+  result = exchange.try_getOutput(changetype<Address>(ilkAddress.value), lot);
 
   if (result !== null && !result.reverted) {
     return result.value.times(BigInt.fromI32(1000000000).times(BigInt.fromI32(1000000000))).div(lot);
