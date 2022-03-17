@@ -25,7 +25,7 @@ enum EventType {
   Allocate,
   Payback,
 }
-import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ByteArray, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { LogAllocate, LogPayback } from '../generated/Pool/Pool';
 
 export function handleLogPoolInitialized(event: LogPoolInitialized): void {
@@ -183,7 +183,7 @@ function addRateForPool(poolToken: string, poolId: string, timestamp: BigInt, fo
 
     pRate.pool = Address.fromString(poolToken);
     pRate.fromDate = t.minus(BigInt.fromI32(1));
-    pRate.toDate = BigInt.fromUnsignedBytes(Bytes.fromHexString(FAR_FUTURE_DATE) as Bytes);
+    pRate.toDate = BigInt.fromUnsignedBytes(Bytes.fromHexString(FAR_FUTURE_DATE));
     pRate.balance = BigInt.fromI32(0);
     pRate.totalSupply = BigInt.fromI32(0);
     pRate.allocated = BigInt.fromI32(0);
@@ -204,7 +204,7 @@ function addRateForPool(poolToken: string, poolId: string, timestamp: BigInt, fo
 
   rate.pool = Address.fromString(poolToken);
   rate.fromDate = t;
-  rate.toDate = BigInt.fromUnsignedBytes(Bytes.fromHexString(FAR_FUTURE_DATE) as Bytes);
+  rate.toDate = BigInt.fromUnsignedBytes(<ByteArray>Bytes.fromHexString(FAR_FUTURE_DATE));
 
   let poolContract = PoolContract.bind(Address.fromString(poolId));
 

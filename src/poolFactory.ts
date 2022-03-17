@@ -2,7 +2,7 @@ import {
   PoolWallet, PoolData, PoolRate, Factory,
 } from '../generated/schema';
 import { Pool as PoolContract } from '../generated/Pool/Pool';
-import { BigInt, Bytes, Address, log } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes, Address, log, ByteArray } from '@graphprotocol/graph-ts';
 import { Module } from '../generated/Pool/Module';
 
 export const FAR_FUTURE_DATE = '0x00cc5e9107';
@@ -63,7 +63,7 @@ export function createPool(id: string, timestamp: BigInt): PoolData {
 
   rate.pool = Address.fromString(id);
   rate.fromDate = timestamp;
-  rate.toDate = BigInt.fromUnsignedBytes(Bytes.fromHexString(FAR_FUTURE_DATE) as Bytes);
+  rate.toDate = BigInt.fromUnsignedBytes(<ByteArray>Bytes.fromHexString(FAR_FUTURE_DATE));
 
   rate.allocated = BigInt.fromI32(0);
   rate.balance = BigInt.fromI32(0);
@@ -102,5 +102,5 @@ function getFactory(): Factory {
 export function getFactoryPools(): string[] {
   let f = Factory.load(FACTORY_KEY);
 
-  return f != null && f.pools != null ? f.pools as string[] : [];
+  return f !== null && f.pools !== null ? f.pools : [];
 }

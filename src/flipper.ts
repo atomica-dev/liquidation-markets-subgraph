@@ -13,7 +13,7 @@ import {
   PoolToAuctionMapping,
 } from '../generated/schema';
 import { MCD_FLIP_ETH_A as Flipper } from '../generated/FlipEthA/MCD_FLIP_ETH_A';
-import { BigInt, Bytes, Address, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, ethereum, ByteArray } from '@graphprotocol/graph-ts';
 import { getPrice } from './osm';
 import { Exchange } from '../generated/FlipEthA/Exchange';
 import { getFactoryPools } from './poolFactory';
@@ -152,7 +152,7 @@ export function handleZrxDealYankLogNoteEvent(event: LogNote): void {
 }
 
 export function handleTendDentLogNoteEvent(event: LogNote, ilk: string): void {
-  let auctionId = BigInt.fromUnsignedBytes(event.params.arg1.reverse() as Bytes);
+  let auctionId = BigInt.fromUnsignedBytes(<ByteArray>event.params.arg1.reverse());
   let flipper = Flipper.bind(event.address);
   let bid = flipper.bids(auctionId);
   let id = auctionId.toString() + ilk + event.address.toHexString().substr(0, 6)
@@ -301,7 +301,7 @@ function addAuctionToStat(statId: string, auction: Auction): void {
 
 export function handleDealYankLogNoteEvent(event: LogNote, ilk: string): void {
   let price = getPrice(ilk);
-  let auctionId = BigInt.fromUnsignedBytes(event.params.arg1.reverse() as Bytes);
+  let auctionId = BigInt.fromUnsignedBytes(<ByteArray>event.params.arg1.reverse());
   let id = auctionId.toString() + ilk + event.address.toHexString().substr(0, 6);
   let auction = Auction.load(id);
 
